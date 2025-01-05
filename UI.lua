@@ -50,7 +50,7 @@ local function createGUI()
             local holidayStars = player:FindFirstChild("_stats"):FindFirstChild("_resourceHolidayStars") and player._stats._resourceHolidayStars.Value or 0
 
             textLabel.Text = string.format(
-                "Bocchi World\ndiscord.gg/4bmwn5E3Gw\nGem: %d  Gold: %d  Gem Legacy: %d\nCandy: %d  Holiday Stars: %d\nFPS: %.1f",
+                "Bocchi World\ndiscord.gg/9jjw973u\nGem: %d  Gold: %d  Gem Legacy: %d\nCandy: %d  Holiday Stars: %d\nFPS: %.1f",
                 gem, gold, gemLegacy, candy, holidayStars, fps
             )
 
