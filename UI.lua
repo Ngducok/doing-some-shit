@@ -25,12 +25,21 @@ local function createStatsUI()
     screenGui.ResetOnSpawn = false
     screenGui.Parent = Players.LocalPlayer:WaitForChild("PlayerGui")
     
+    local bocchiImage = Instance.new("ImageButton")
+    bocchiImage.Name = "BocchiToggle"
+    bocchiImage.Image = "rbxassetid://15914181359"
+    bocchiImage.BackgroundTransparency = 1
+    bocchiImage.Size = UDim2.new(0, 80, 0, 80)
+    bocchiImage.Position = UDim2.new(0, 10, 0.5, -40)
+    bocchiImage.Parent = screenGui
+    
     local mainContainer = Instance.new("Frame")
     mainContainer.Name = "MainContainer"
     mainContainer.BackgroundColor3 = COLORS.background
     mainContainer.BorderSizePixel = 0
     mainContainer.Size = UDim2.new(0, 380, 0, 320)
     mainContainer.Position = UDim2.new(0.5, -190, 0.5, -160)
+    mainContainer.Visible = false
     mainContainer.Parent = screenGui
     
     local containerCorner = Instance.new("UICorner")
@@ -141,6 +150,10 @@ local function createStatsUI()
     local lastTime = tick()
     local frameCount = 0
     local portalCount = 0
+    
+    bocchiImage.MouseButton1Click:Connect(function()
+        mainContainer.Visible = not mainContainer.Visible
+    end)
     
     local function updatePickcardStatus(isEnabled)
         TweenService:Create(statusDot, TweenInfo.new(0.3), {
