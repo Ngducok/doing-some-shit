@@ -1,6 +1,7 @@
 local Players = game:GetService("Players")
 local RunService = game:GetService("RunService")
 local TweenService = game:GetService("TweenService")
+local UserInputService = game:GetService("UserInputService")
 
 local COLORS = {
     primary = Color3.fromRGB(255, 192, 203),
@@ -19,26 +20,83 @@ local function formatNumber(number)
     return tostring(number)
 end
 
+local function createStatItem(parent, name, icon, position)
+    local container = Instance.new("Frame")
+    container.Name = name
+    container.BackgroundColor3 = COLORS.secondary
+    container.Size = UDim2.new(0.48, 0, 0, 38)
+    container.Position = position
+    container.Parent = parent
+    
+    local itemCorner = Instance.new("UICorner")
+    itemCorner.CornerRadius = UDim.new(0, 12)
+    itemCorner.Parent = container
+    
+    local iconLabel = Instance.new("TextLabel")
+    iconLabel.BackgroundTransparency = 1
+    iconLabel.Size = UDim2.new(0, 30, 1, -10)
+    iconLabel.Position = UDim2.new(0, 10, 0, 5)
+    iconLabel.Font = Enum.Font.GothamBold
+    iconLabel.Text = icon
+    iconLabel.TextColor3 = COLORS.text
+    iconLabel.TextSize = 16
+    iconLabel.Parent = container
+    
+    local nameLabel = Instance.new("TextLabel")
+    nameLabel.BackgroundTransparency = 1
+    nameLabel.Size = UDim2.new(0, 100, 0, 16)
+    nameLabel.Position = UDim2.new(0, 45, 0, 5)
+    nameLabel.Font = Enum.Font.GothamMedium
+    nameLabel.Text = name
+    nameLabel.TextColor3 = COLORS.text_secondary
+    nameLabel.TextSize = 12
+    nameLabel.TextXAlignment = Enum.TextXAlignment.Left
+    nameLabel.Parent = container
+    
+    local valueLabel = Instance.new("TextLabel")
+    valueLabel.BackgroundTransparency = 1
+    valueLabel.Size = UDim2.new(1, -55, 0, 16)
+    valueLabel.Position = UDim2.new(0, 45, 0, 20)
+    valueLabel.Font = Enum.Font.GothamSemibold
+    valueLabel.Text = "0"
+    valueLabel.TextColor3 = COLORS.text
+    valueLabel.TextSize = 14
+    valueLabel.TextXAlignment = Enum.TextXAlignment.Left
+    valueLabel.Parent = container
+    
+    return valueLabel
+end
+
 local function createStatsUI()
     local screenGui = Instance.new("ScreenGui")
     screenGui.Name = "BocchiWorldUI"
     screenGui.ResetOnSpawn = false
+    screenGui.IgnoreGuiInset = true
+    screenGui.ZIndexBehavior = Enum.ZIndexBehavior.Sibling
     screenGui.Parent = Players.LocalPlayer:WaitForChild("PlayerGui")
     
-    local bocchiImage = Instance.new("ImageButton")
-    bocchiImage.Name = "BocchiToggle"
-    bocchiImage.Image = "rbxassetid://15914181359"
-    bocchiImage.BackgroundTransparency = 1
-    bocchiImage.Size = UDim2.new(0, 80, 0, 80)
-    bocchiImage.Position = UDim2.new(0, 10, 0.5, -40)
-    bocchiImage.Parent = screenGui
+    local toggleButton = Instance.new("ImageButton")
+    toggleButton.Name = "BocchiToggle"
+    toggleButton.Image = "rbxassetid://17836568558"
+    toggleButton.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
+    toggleButton.BackgroundTransparency = 0.5
+    toggleButton.Size = UDim2.new(0, 50, 0, 50)
+    toggleButton.Position = UDim2.new(0, 10, 0.5, -25)
+    toggleButton.SizeConstraint = Enum.SizeConstraint.RelativeXY
+    toggleButton.ZIndex = 10
+    
+    local uiCorner = Instance.new("UICorner")
+    uiCorner.CornerRadius = UDim.new(0.5, 0)
+    uiCorner.Parent = toggleButton
+    
+    toggleButton.Parent = screenGui
     
     local mainContainer = Instance.new("Frame")
     mainContainer.Name = "MainContainer"
     mainContainer.BackgroundColor3 = COLORS.background
     mainContainer.BorderSizePixel = 0
     mainContainer.Size = UDim2.new(0, 380, 0, 320)
-    mainContainer.Position = UDim2.new(0.5, -190, 0.5, -160)
+    mainContainer.Position = UDim2.new(1, -390, 0.5, -160)
     mainContainer.Visible = false
     mainContainer.Parent = screenGui
     
@@ -86,122 +144,69 @@ local function createStatsUI()
     statsContainer.Position = UDim2.new(0, 20, 0, 60)
     statsContainer.Parent = mainContainer
     
-    local function createStatItem(name, icon, position)
-        local container = Instance.new("Frame")
-        container.Name = name
-        container.BackgroundColor3 = COLORS.secondary
-        container.Size = UDim2.new(0.48, 0, 0, 38)
-        container.Position = position
-        container.Parent = statsContainer
-        
-        local itemCorner = Instance.new("UICorner")
-        itemCorner.CornerRadius = UDim.new(0, 12)
-        itemCorner.Parent = container
-        
-        local iconLabel = Instance.new("TextLabel")
-        iconLabel.BackgroundTransparency = 1
-        iconLabel.Size = UDim2.new(0, 30, 1, -10)
-        iconLabel.Position = UDim2.new(0, 10, 0, 5)
-        iconLabel.Font = Enum.Font.GothamBold
-        iconLabel.Text = icon
-        iconLabel.TextColor3 = COLORS.text
-        iconLabel.TextSize = 16
-        iconLabel.Parent = container
-        
-        local nameLabel = Instance.new("TextLabel")
-        nameLabel.BackgroundTransparency = 1
-        nameLabel.Size = UDim2.new(0, 100, 0, 16)
-        nameLabel.Position = UDim2.new(0, 45, 0, 5)
-        nameLabel.Font = Enum.Font.GothamMedium
-        nameLabel.Text = name
-        nameLabel.TextColor3 = COLORS.text_secondary
-        nameLabel.TextSize = 12
-        nameLabel.TextXAlignment = Enum.TextXAlignment.Left
-        nameLabel.Parent = container
-        
-        local valueLabel = Instance.new("TextLabel")
-        valueLabel.BackgroundTransparency = 1
-        valueLabel.Size = UDim2.new(1, -55, 0, 16)
-        valueLabel.Position = UDim2.new(0, 45, 0, 20)
-        valueLabel.Font = Enum.Font.GothamSemibold
-        valueLabel.Text = "0"
-        valueLabel.TextColor3 = COLORS.text
-        valueLabel.TextSize = 14
-        valueLabel.TextXAlignment = Enum.TextXAlignment.Left
-        valueLabel.Parent = container
-        
-        return valueLabel
+    local displays = {
+        gem = createStatItem(statsContainer, "Gems", "💎", UDim2.new(0, 0, 0, 0)),
+        gold = createStatItem(statsContainer, "Gold", "🏆", UDim2.new(0.52, 0, 0, 0)),
+        legacy = createStatItem(statsContainer, "Legacy", "⭐", UDim2.new(0, 0, 0, 44)),
+        candy = createStatItem(statsContainer, "Candy", "🍬", UDim2.new(0.52, 0, 0, 44)),
+        stars = createStatItem(statsContainer, "Stars", "✨", UDim2.new(0, 0, 0, 88)),
+        winrate = createStatItem(statsContainer, "Winrate", "📈", UDim2.new(0.52, 0, 0, 88)),
+        games = createStatItem(statsContainer, "Games", "🎮", UDim2.new(0, 0, 0, 132)),
+        fps = createStatItem(statsContainer, "FPS", "⚡", UDim2.new(0.52, 0, 0, 132)),
+        history = createStatItem(statsContainer, "History", "📊", UDim2.new(0, 0, 0, 176)),
+        portal = createStatItem(statsContainer, "Portal", "🌀", UDim2.new(0.52, 0, 0, 176))
+    }
+    
+    local stats = {
+        totalGames = 0,
+        wins = 0,
+        resultHistory = "",
+        lastTime = tick(),
+        frameCount = 0,
+        portalCount = 0
+    }
+
+    local function watchResultsUI()
+        local playerGui = Players.LocalPlayer:WaitForChild("PlayerGui")
+        playerGui.ChildAdded:Connect(function(child)
+            if child.Name == "ResultsUI" then
+                task.wait(1)
+                local resultText = child:FindFirstChild("Background"):FindFirstChild("Result", true)
+                if resultText and resultText:IsA("TextLabel") then
+                    stats.totalGames = stats.totalGames + 1
+                    local isWin = resultText.Text:lower():find("victory") ~= nil
+                    if isWin then
+                        stats.wins = stats.wins + 1
+                    end
+                    stats.resultHistory = (isWin and "✓" or "×") .. stats.resultHistory
+                    if #stats.resultHistory > 10 then
+                        stats.resultHistory = stats.resultHistory:sub(1, 10)
+                    end
+                    displays.history.Text = stats.resultHistory
+                    displays.games.Text = formatNumber(stats.totalGames)
+                    displays.winrate.Text = string.format("%.1f%%", (stats.wins/stats.totalGames*100))
+                end
+            end
+        end)
     end
     
-    local gemDisplay = createStatItem("Gems", "💎", UDim2.new(0, 0, 0, 0))
-    local goldDisplay = createStatItem("Gold", "🏆", UDim2.new(0.52, 0, 0, 0))
-    local legacyDisplay = createStatItem("Legacy", "⭐", UDim2.new(0, 0, 0, 44))
-    local candyDisplay = createStatItem("Candy", "🍬", UDim2.new(0.52, 0, 0, 44))
-    local starsDisplay = createStatItem("Stars", "✨", UDim2.new(0, 0, 0, 88))
-    local winrateDisplay = createStatItem("Winrate", "📈", UDim2.new(0.52, 0, 0, 88))
-    local gamesDisplay = createStatItem("Games", "🎮", UDim2.new(0, 0, 0, 132))
-    local fpsDisplay = createStatItem("FPS", "⚡", UDim2.new(0.52, 0, 0, 132))
-    local historyDisplay = createStatItem("History", "📊", UDim2.new(0, 0, 0, 176))
-    local portalDisplay = createStatItem("Portal", "🌀", UDim2.new(0.52, 0, 0, 176))
-    
-    local totalGames = 0
-    local wins = 0
-    local resultHistory = ""
-    local lastTime = tick()
-    local frameCount = 0
-    local portalCount = 0
-    
-    bocchiImage.MouseButton1Click:Connect(function()
+    toggleButton.MouseButton1Click:Connect(function()
         mainContainer.Visible = not mainContainer.Visible
     end)
     
-    local function updatePickcardStatus(isEnabled)
-        TweenService:Create(statusDot, TweenInfo.new(0.3), {
-            BackgroundColor3 = isEnabled and COLORS.success or COLORS.error
-        }):Play()
+    if not UserInputService.TouchEnabled or UserInputService.KeyboardEnabled then
+        UserInputService.InputBegan:Connect(function(input, gameProcessed)
+            if not gameProcessed and input.KeyCode == Enum.KeyCode.LeftControl then
+                mainContainer.Visible = not mainContainer.Visible
+            end
+        end)
     end
     
-    local function addGameResult(isWin)
-        totalGames = totalGames + 1
-        if isWin then wins = wins + 1 end
-        resultHistory = (isWin and "✓" or "×") .. resultHistory
-        if #resultHistory > 10 then resultHistory = resultHistory:sub(1, 10) end
-        historyDisplay.Text = resultHistory
-    end
-    
-    local function incrementPortal()
-        portalCount = portalCount + 1
-        portalDisplay.Text = tostring(portalCount)
-    end
-    
-    RunService.RenderStepped:Connect(function()
-        frameCount = frameCount + 1
-        local currentTime = tick()
-        
-        if currentTime - lastTime >= 1 then
-            local fps = math.floor(frameCount / (currentTime - lastTime))
-            fpsDisplay.Text = tostring(fps)
-            frameCount = 0
-            lastTime = currentTime
-        end
-        
-        local stats = Players.LocalPlayer:FindFirstChild("_stats")
-        if stats then
-            gemDisplay.Text = formatNumber(stats:FindFirstChild("gem_amount") and stats.gem_amount.Value or 0)
-            goldDisplay.Text = formatNumber(stats:FindFirstChild("gold_amount") and stats.gold_amount.Value or 0)
-            legacyDisplay.Text = formatNumber(stats:FindFirstChild("_resourceGemsLegacy") and stats._resourceGemsLegacy.Value or 0)
-            candyDisplay.Text = formatNumber(stats:FindFirstChild("_resourceCandies") and stats._resourceCandies.Value or 0)
-            starsDisplay.Text = formatNumber(stats:FindFirstChild("_resourceHolidayStars") and stats._resourceHolidayStars.Value or 0)
-            winrateDisplay.Text = string.format("%.1f%%", totalGames > 0 and (wins/totalGames*100) or 0)
-            gamesDisplay.Text = formatNumber(totalGames)
-        end
-    end)
-    
-    local UserInputService = game:GetService("UserInputService")
     local dragging, dragStart, startPos
     
     mainContainer.InputBegan:Connect(function(input)
-        if input.UserInputType == Enum.UserInputType.MouseButton1 then
+        if input.UserInputType == Enum.UserInputType.MouseButton1 or
+           input.UserInputType == Enum.UserInputType.Touch then
             dragging = true
             dragStart = input.Position
             startPos = mainContainer.Position
@@ -209,7 +214,8 @@ local function createStatsUI()
     end)
     
     mainContainer.InputEnded:Connect(function(input)
-        if input.UserInputType == Enum.UserInputType.MouseButton1 then
+        if input.UserInputType == Enum.UserInputType.MouseButton1 or
+           input.UserInputType == Enum.UserInputType.Touch then
             dragging = false
         end
     end)
@@ -226,10 +232,42 @@ local function createStatsUI()
         end
     end)
     
-    return screenGui, updatePickcardStatus, addGameResult, incrementPortal
+    RunService.RenderStepped:Connect(function()
+        stats.frameCount = stats.frameCount + 1
+        local currentTime = tick()
+        
+        if currentTime - stats.lastTime >= 1 then
+            displays.fps.Text = tostring(math.floor(stats.frameCount / (currentTime - stats.lastTime)))
+            stats.frameCount = 0
+            stats.lastTime = currentTime
+        end
+        
+        local playerStats = Players.LocalPlayer:FindFirstChild("_stats")
+        if playerStats then
+            displays.gem.Text = formatNumber(playerStats:FindFirstChild("gem_amount") and playerStats.gem_amount.Value or 0)
+            displays.gold.Text = formatNumber(playerStats:FindFirstChild("gold_amount") and playerStats.gold_amount.Value or 0)
+            displays.legacy.Text = formatNumber(playerStats:FindFirstChild("_resourceGemsLegacy") and playerStats._resourceGemsLegacy.Value or 0)
+            displays.candy.Text = formatNumber(playerStats:FindFirstChild("_resourceCandies") and playerStats._resourceCandies.Value or 0)
+            displays.stars.Text = formatNumber(playerStats:FindFirstChild("_resourceHolidayStars") and playerStats._resourceHolidayStars.Value or 0)
+        end
+    end)
+    
+    local function updatePickcardStatus(isEnabled)
+        TweenService:Create(statusDot, TweenInfo.new(0.3), {
+            BackgroundColor3 = isEnabled and COLORS.success or COLORS.error
+        }):Play()
+    end
+    
+    local function incrementPortal()
+        stats.portalCount = stats.portalCount + 1
+        displays.portal.Text = tostring(stats.portalCount)
+    end
+
+    watchResultsUI()
+    
+    return screenGui, updatePickcardStatus, nil, incrementPortal
 end
 
-local gui, updateStatus, addResult, addPortal = createStatsUI()
+local gui, updateStatus, _, addPortal = createStatsUI()
 _G.updatePickcardStatus = updateStatus
-_G.addGameResult = addResult
 _G.incrementPortal = addPortal
