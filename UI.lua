@@ -10,7 +10,15 @@ local COLORS = {
     text = Color3.fromRGB(75, 75, 75),
     text_secondary = Color3.fromRGB(120, 120, 120),
     success = Color3.fromRGB(46, 204, 113),
-    error = Color3.fromRGB(231, 76, 60)
+    error = Color3.fromRGB(231, 76, 60),
+    progress_bar = Color3.fromRGB(255, 182, 193)
+}
+
+local TWEEN_INFO = {
+    quick = TweenInfo.new(0.3, Enum.EasingStyle.Quad, Enum.EasingDirection.Out),
+    bounce = TweenInfo.new(0.5, Enum.EasingStyle.Bounce, Enum.EasingDirection.Out),
+    spring = TweenInfo.new(0.7, Enum.EasingStyle.Back, Enum.EasingDirection.Out),
+    loading = TweenInfo.new(1, Enum.EasingStyle.Linear)
 }
 
 local function formatNumber(number)
@@ -20,7 +28,60 @@ local function formatNumber(number)
     return tostring(number)
 end
 
-local function createStatItem(parent, name, icon, position)
+local function createProgressBar(parent)
+    local progressContainer = Instance.new("Frame")
+    progressContainer.Name = "ProgressContainer"
+    progressContainer.BackgroundColor3 = COLORS.secondary
+    progressContainer.Size = UDim2.new(1, -40, 0, 6)
+    progressContainer.Position = UDim2.new(0, 20, 0, 40)
+    progressContainer.Parent = parent
+    
+    local containerCorner = Instance.new("UICorner")
+    containerCorner.CornerRadius = UDim.new(0, 3)
+    containerCorner.Parent = progressContainer
+    
+    local progressBar = Instance.new("Frame")
+    progressBar.Name = "ProgressBar"
+    progressBar.BackgroundColor3 = COLORS.progress_bar
+    progressBar.Size = UDim2.new(0, 0, 1, 0)
+    progressBar.Parent = progressContainer
+    
+    local barCorner = Instance.new("UICorner")
+    barCorner.CornerRadius = UDim.new(0, 3)
+    barCorner.Parent = progressBar
+    
+    return progressBar
+end
+
+local function animateStatItem(container, delay)
+    container.Position = container.Position + UDim2.new(-1, 0, 0, 0)
+    container.BackgroundTransparency = 1
+    
+    for _, child in pairs(container:GetChildren()) do
+        if child:IsA("TextLabel") then
+            child.TextTransparency = 1
+        end
+    end
+    
+    task.delay(delay, function()
+        local positionTween = TweenService:Create(container, TWEEN_INFO.spring, {
+            Position = container.Position - UDim2.new(-1, 0, 0, 0),
+            BackgroundTransparency = 0
+        })
+        
+        for _, child in pairs(container:GetChildren()) do
+            if child:IsA("TextLabel") then
+                TweenService:Create(child, TWEEN_INFO.quick, {
+                    TextTransparency = 0
+                }):Play()
+            end
+        end
+        
+        positionTween:Play()
+    end)
+end
+
+local function createStatItem(parent, name, icon, position, loadDelay)
     local container = Instance.new("Frame")
     container.Name = name
     container.BackgroundColor3 = COLORS.secondary
@@ -64,6 +125,7 @@ local function createStatItem(parent, name, icon, position)
     valueLabel.TextXAlignment = Enum.TextXAlignment.Left
     valueLabel.Parent = container
     
+    animateStatItem(container, loadDelay)
     return valueLabel
 end
 
@@ -81,15 +143,18 @@ local function createStatsUI()
     toggleButton.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
     toggleButton.BackgroundTransparency = 0.5
     toggleButton.Size = UDim2.new(0, 50, 0, 50)
-    toggleButton.Position = UDim2.new(0, 10, 0.5, -25)
+    toggleButton.Position = UDim2.new(0, -50, 0.5, -25)
     toggleButton.SizeConstraint = Enum.SizeConstraint.RelativeXY
     toggleButton.ZIndex = 10
+    toggleButton.Parent = screenGui
     
     local uiCorner = Instance.new("UICorner")
     uiCorner.CornerRadius = UDim.new(0.5, 0)
     uiCorner.Parent = toggleButton
     
-    toggleButton.Parent = screenGui
+    TweenService:Create(toggleButton, TWEEN_INFO.spring, {
+        Position = UDim2.new(0, 10, 0.5, -25)
+    }):Play()
     
     local mainContainer = Instance.new("Frame")
     mainContainer.Name = "MainContainer"
@@ -97,13 +162,12 @@ local function createStatsUI()
     mainContainer.BorderSizePixel = 0
     mainContainer.Size = UDim2.new(0, 380, 0, 320)
     mainContainer.Position = UDim2.new(1, -390, 0.5, -160)
-    mainContainer.Visible = false
     mainContainer.Parent = screenGui
     
     local containerCorner = Instance.new("UICorner")
     containerCorner.CornerRadius = UDim.new(0, 20)
     containerCorner.Parent = mainContainer
-
+    
     local header = Instance.new("Frame")
     header.Name = "Header"
     header.BackgroundColor3 = COLORS.primary
@@ -125,6 +189,8 @@ local function createStatsUI()
     title.TextXAlignment = Enum.TextXAlignment.Left
     title.Parent = header
     
+    local progressBar = createProgressBar(header)
+    
     local statusDot = Instance.new("Frame")
     statusDot.Name = "StatusDot"
     statusDot.Size = UDim2.new(0, 10, 0, 10)
@@ -144,17 +210,32 @@ local function createStatsUI()
     statsContainer.Position = UDim2.new(0, 20, 0, 60)
     statsContainer.Parent = mainContainer
     
+    local loadingSequence = coroutine.create(function()
+        local progressTween = TweenService:Create(progressBar, TWEEN_INFO.loading, {
+            Size = UDim2.new(1, 0, 1, 0)
+        })
+        progressTween:Play()
+        progressTween.Completed:Wait()
+        
+        task.wait(0.2)
+        TweenService:Create(progressBar, TWEEN_INFO.quick, {
+            BackgroundTransparency = 1
+        }):Play()
+    end)
+    
+    coroutine.resume(loadingSequence)
+    
     local displays = {
-        gem = createStatItem(statsContainer, "Gems", "💎", UDim2.new(0, 0, 0, 0)),
-        gold = createStatItem(statsContainer, "Gold", "🏆", UDim2.new(0.52, 0, 0, 0)),
-        legacy = createStatItem(statsContainer, "Legacy", "⭐", UDim2.new(0, 0, 0, 44)),
-        candy = createStatItem(statsContainer, "Candy", "🍬", UDim2.new(0.52, 0, 0, 44)),
-        stars = createStatItem(statsContainer, "Stars", "✨", UDim2.new(0, 0, 0, 88)),
-        winrate = createStatItem(statsContainer, "Winrate", "📈", UDim2.new(0.52, 0, 0, 88)),
-        games = createStatItem(statsContainer, "Games", "🎮", UDim2.new(0, 0, 0, 132)),
-        fps = createStatItem(statsContainer, "FPS", "⚡", UDim2.new(0.52, 0, 0, 132)),
-        history = createStatItem(statsContainer, "History", "📊", UDim2.new(0, 0, 0, 176)),
-        portal = createStatItem(statsContainer, "Portal", "🌀", UDim2.new(0.52, 0, 0, 176))
+        gem = createStatItem(statsContainer, "Gems", "💎", UDim2.new(0, 0, 0, 0), 0.1),
+        gold = createStatItem(statsContainer, "Gold", "🏆", UDim2.new(0.52, 0, 0, 0), 0.2),
+        legacy = createStatItem(statsContainer, "Legacy", "⭐", UDim2.new(0, 0, 0, 44), 0.3),
+        candy = createStatItem(statsContainer, "Candy", "🍬", UDim2.new(0.52, 0, 0, 44), 0.4),
+        stars = createStatItem(statsContainer, "Stars", "✨", UDim2.new(0, 0, 0, 88), 0.5),
+        winrate = createStatItem(statsContainer, "Winrate", "📈", UDim2.new(0.52, 0, 0, 88), 0.6),
+        games = createStatItem(statsContainer, "Games", "🎮", UDim2.new(0, 0, 0, 132), 0.7),
+        fps = createStatItem(statsContainer, "FPS", "⚡", UDim2.new(0.52, 0, 0, 132), 0.8),
+        history = createStatItem(statsContainer, "History", "📊", UDim2.new(0, 0, 0, 176), 0.9),
+        portal = createStatItem(statsContainer, "Portal", "🌀", UDim2.new(0.52, 0, 0, 176), 1.0)
     }
     
     local stats = {
@@ -165,7 +246,32 @@ local function createStatsUI()
         frameCount = 0,
         portalCount = 0
     }
-
+    
+    local function hideUI()
+        local hideTween = TweenService:Create(mainContainer, TWEEN_INFO.spring, {
+            Position = UDim2.new(1, 0, 0.5, -160)
+        })
+        hideTween:Play()
+    end
+    
+    local function showUI()
+        mainContainer.Position = UDim2.new(1, 0, 0.5, -160)
+        local showTween = TweenService:Create(mainContainer, TWEEN_INFO.spring, {
+            Position = UDim2.new(1, -390, 0.5, -160)
+        })
+        showTween:Play()
+    end
+    
+    local isVisible = true
+    toggleButton.MouseButton1Click:Connect(function()
+        if isVisible then
+            hideUI()
+        else
+            showUI()
+        end
+        isVisible = not isVisible
+    end)
+    
     local function watchResultsUI()
         local playerGui = Players.LocalPlayer:WaitForChild("PlayerGui")
         playerGui.ChildAdded:Connect(function(child)
@@ -190,84 +296,9 @@ local function createStatsUI()
         end)
     end
     
-    toggleButton.MouseButton1Click:Connect(function()
-        mainContainer.Visible = not mainContainer.Visible
-    end)
-    
     if not UserInputService.TouchEnabled or UserInputService.KeyboardEnabled then
         UserInputService.InputBegan:Connect(function(input, gameProcessed)
             if not gameProcessed and input.KeyCode == Enum.KeyCode.LeftControl then
-                mainContainer.Visible = not mainContainer.Visible
-            end
-        end)
-    end
-    
-    local dragging, dragStart, startPos
-    
-    mainContainer.InputBegan:Connect(function(input)
-        if input.UserInputType == Enum.UserInputType.MouseButton1 or
-           input.UserInputType == Enum.UserInputType.Touch then
-            dragging = true
-            dragStart = input.Position
-            startPos = mainContainer.Position
-        end
-    end)
-    
-    mainContainer.InputEnded:Connect(function(input)
-        if input.UserInputType == Enum.UserInputType.MouseButton1 or
-           input.UserInputType == Enum.UserInputType.Touch then
-            dragging = false
-        end
-    end)
-    
-    RunService:BindToRenderStep("DragUpdate", Enum.RenderPriority.Camera.Value, function()
-        if dragging and dragStart then
-            local delta = UserInputService:GetMouseLocation() - dragStart
-            mainContainer.Position = UDim2.new(
-                startPos.X.Scale,
-                startPos.X.Offset + delta.X,
-                startPos.Y.Scale,
-                startPos.Y.Offset + delta.Y
-            )
-        end
-    end)
-    
-    RunService.RenderStepped:Connect(function()
-        stats.frameCount = stats.frameCount + 1
-        local currentTime = tick()
-        
-        if currentTime - stats.lastTime >= 1 then
-            displays.fps.Text = tostring(math.floor(stats.frameCount / (currentTime - stats.lastTime)))
-            stats.frameCount = 0
-            stats.lastTime = currentTime
-        end
-        
-        local playerStats = Players.LocalPlayer:FindFirstChild("_stats")
-        if playerStats then
-            displays.gem.Text = formatNumber(playerStats:FindFirstChild("gem_amount") and playerStats.gem_amount.Value or 0)
-            displays.gold.Text = formatNumber(playerStats:FindFirstChild("gold_amount") and playerStats.gold_amount.Value or 0)
-            displays.legacy.Text = formatNumber(playerStats:FindFirstChild("_resourceGemsLegacy") and playerStats._resourceGemsLegacy.Value or 0)
-            displays.candy.Text = formatNumber(playerStats:FindFirstChild("_resourceCandies") and playerStats._resourceCandies.Value or 0)
-            displays.stars.Text = formatNumber(playerStats:FindFirstChild("_resourceHolidayStars") and playerStats._resourceHolidayStars.Value or 0)
-        end
-    end)
-    
-    local function updatePickcardStatus(isEnabled)
-        TweenService:Create(statusDot, TweenInfo.new(0.3), {
-            BackgroundColor3 = isEnabled and COLORS.success or COLORS.error
-        }):Play()
-    end
-    
-    local function incrementPortal()
-        stats.portalCount = stats.portalCount + 1
-        displays.portal.Text = tostring(stats.portalCount)
-    end
-
-    watchResultsUI()
-    
-    return screenGui, updatePickcardStatus, nil, incrementPortal
-end
-
-local gui, updateStatus, _, addPortal = createStatsUI()
-_G.updatePickcardStatus = updateStatus
-_G.incrementPortal = addPortal
+                if isVisible then
+                    hideUI()
+                else
