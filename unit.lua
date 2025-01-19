@@ -72,6 +72,27 @@
             Rainbow_Fruit = 1,
         }
 
+        Goku = {
+            takedown = 7500,
+            Marks = 400,
+            Yellow_Fruit = 12,
+            Blue_Fruit = 3,
+            Red_Fruit = 3,
+            Pink_Fruit = 2,
+            Green_Fruit = 3,
+            Rainbow_Fruit = 1,
+        }
+
+        Vegeta = {
+            takedown = 7500,
+            Marks = 400,
+            Yellow_Fruit = 12,
+            Blue_Fruit = 2,
+            Red_Fruit = 3,
+            Pink_Fruit = 2,
+            Green_Fruit = 3,
+            Rainbow_Fruit = 1,
+        }
     }
 
     return UnitsRequirement
