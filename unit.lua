@@ -1,4 +1,4 @@
-    local UnitsRequirement - {
+    local UnitsRequirement = {
         iceclaw = {
             TakeDown = 7500,
             Yellow_Fruit = 30,
