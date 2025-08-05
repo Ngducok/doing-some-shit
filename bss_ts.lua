@@ -1,145 +1,160 @@
 repeat task.wait() until game:IsLoaded()
 
-local plr = game.Players.LocalPlayer
+local v1 = game.Players.LocalPlayer
 
 repeat
     task.wait()
-until plr
+until v1
 repeat
     task.wait()
-until plr.Character
+until v1.Character
 repeat
     task.wait()
-until plr.Character:FindFirstChild("HumanoidRootPart")
+until v1.Character:FindFirstChild("HumanoidRootPart")
 
-local tabl = {}
-function format(v)
+local v2 = {}
+function v_u_1(v)
     return tostring(v):reverse():gsub("%d%d%d", "%1,"):reverse():gsub("^,", "")
 end
 
-function getinv()
-    local success, result = pcall(function()
+function v_u_2()
+    local v3, v4 = pcall(function()
         return require(game.ReplicatedStorage.ClientStatCache):Get()
     end)
     
-    if not success then
+    if not v3 then
         return nil
     end
     
-    local data = {
-        pl = plr.CoreStats.Pollen.Value,
-        cap = plr.CoreStats.Capacity.Value,
-        hn = plr.CoreStats.Honey.Value,
-        itms = {},
-        eggs = result.Eggs or {},
-        equippeditm = {
-            t = result.EquippedCollector or "None",
-            p = result.EquippedParachute or "None"
+    local v5 = {
+        v6 = v1.CoreStats.Pollen.Value,
+        v7 = v1.CoreStats.Capacity.Value,
+        v8 = v1.CoreStats.Honey.Value,
+        v9 = {},
+        v10 = v4.Eggs or {},
+        v11 = {
+            v12 = v4.EquippedCollector or "None",
+            v13 = v4.EquippedParachute or "None",
+            v14 = v4.EquippedBag or "None",
+            v15 = v4.EquippedHat or "None"
         }
     }
-    if result.Items then
-        data.itms = result.Items
+    if v4.Items then
+        v5.v9 = v4.Items
     end
-    return data
+    return v5
 end
 
-function gethn()
-    local success, result = pcall(function()
-        local StatCache = require(game.ReplicatedStorage.ClientStatCache):Get()
+function v_u_3()
+    local v16, v17 = pcall(function()
+        local v18 = require(game.ReplicatedStorage.ClientStatCache):Get()
         return {
-            CurrentHoney = plr.CoreStats.Honey.Value,
-            TotalHoney = StatCache.Totals.Honey or 0,
-            HoneyPerSecond = StatCache.HoneyAtLastSave or 0
+            v19 = v1.CoreStats.Honey.Value,
+            v20 = v18.Totals.Honey or 0,
+            v21 = v18.HoneyAtLastSave or 0
         }
     end)
     
-    if success then
-        return result
+    if v16 then
+        return v17
     else
         return {
-            CurrentHoney = plr.CoreStats.Honey.Value,
-            TotalHoney = 0,
-            HoneyPerSecond = 0
+            v19 = v1.CoreStats.Honey.Value,
+            v20 = 0,
+            v21 = 0
         }
     end
 end
 
-function getbees()
-    local success, result = pcall(function()
-        local StatCache = require(game.ReplicatedStorage.ClientStatCache):Get()
-        local beesData = {
-            count = 0,
-            slots = 0,
-            bees = {}
+function v_u_4()
+    local v22, v23 = pcall(function()
+        local v24 = require(game.ReplicatedStorage.ClientStatCache):Get()
+        local v25 = game:GetService("ReplicatedStorage").Events.RetrievePlayerStats:InvokeServer()
+        local v26 = {
+            v27 = 0,
+            v28 = 0,
+            v29 = {}
         }
         
-        if StatCache.Bees then
-            for slot, beeData in pairs(StatCache.Bees) do
-                if beeData then
-                    beesData.count = beesData.count + 1
-                    beesData.bees[slot] = {
-                        type = beeData.Type or "Unknown",
-                        level = beeData.Level or 1
+        if v25 and v25.Bees then
+            for v30, v31 in pairs(v25.Bees) do
+                if v31 then
+                    v26.v27 = v26.v27 + 1
+                    v26.v29[v30] = {
+                        v32 = v31.Type or "Unknown",
+                        v33 = v31.Level or 1
                     }
                 end
             end
         end
         
-        return beesData
+        for _, v34 in pairs(game.Workspace.Honeycombs:GetChildren()) do
+            if tostring(v34.Owner.Value) == v1.Name then
+                local v35 = v34:FindFirstChild("Cells")
+                if v35 then
+                    v26.v28 = #v35:GetChildren()
+                end
+                break
+            end
+        end
+        
+        return v26
     end)
     
-    if success then
-        return result
+    if v22 then
+        return v23
     else
         return {
-            count = 0,
-            slots = 0,
-            bees = {}
+            v27 = 0,
+            v28 = 0,
+            v29 = {}
         }
     end
 end
 
-function printdata()
-    local inv = getinv()
-    local honey = gethn()
-    local bees = getbees()
+function v_u_5()
+    local v36 = v_u_2()
+    local v37 = v_u_3()
+    local v38 = v_u_4()
     
     print("=============== PLAYER DATA ===============")
-    print("Player:", plr.Name)
+    print("Player:", v1.Name)
     print("")
     
-    if honey then
+    if v37 then
         print("========== HONEY ==========")
-        print("Current:", format(honey.CurrentHoney))
-        print("Total:", format(honey.TotalHoney))
+        print("Current:", v_u_1(v37.v19))
+        print("Total:", v_u_1(v37.v20))
         print("")
     end
     
-    if inv then
+    if v36 then
         print("========== INVENTORY ==========")
-        print("Pollen:", format(inv.pl) .. "/" .. format(inv.cap))
-        print("Honey:", format(inv.hn))
+        print("Pollen:", v_u_1(v36.v6) .. "/" .. v_u_1(v36.v7))
+        print("Honey:", v_u_1(v36.v8))
         print("")
         
         print("=== EQUIPPED ===")
-        print("Tool:", inv.equippeditm.t)
-        print("Parachute:", inv.equippeditm.p)
+        print("Collector:", v36.v11.v12)
+        print("Parachute:", v36.v11.v13)
+        print("Bag:", v36.v11.v14)
+        print("Hat:", v36.v11.v15)
         print("")
         
         print("=== EGGS ===")
-        for eggType, count in pairs(inv.eggs) do
-            if count > 0 then
-                print(eggType .. ":", count)
+        for v39, v40 in pairs(v36.v10) do
+            if v40 > 0 then
+                print(v39 .. ":", v40)
             end
         end
         print("")
     end
     
-    if bees then
+    if v38 then
         print("========== BEES ==========")
-        print("Count:", bees.count)
-        for slot, bee in pairs(bees.bees) do
-            print("Slot " .. slot .. ":", bee.type .. " (Lv" .. bee.level .. ")")
+        print("Count:", v38.v27 .. "/" .. v38.v28)
+        for v41, v42 in pairs(v38.v29) do
+            print("Slot " .. v41 .. ":", v42.v32 .. " (Lv" .. v42.v33 .. ")")
         end
         print("")
     end
@@ -147,5 +162,4 @@ function printdata()
     print("==========================================")
 end
 
-printdata()
-
+v_u_5()
