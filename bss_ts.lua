@@ -69,16 +69,15 @@ end
 function v_u_4()
     local v22, v23 = pcall(function()
         local v24 = require(game.ReplicatedStorage.ClientStatCache):Get()
-        local v25 = game:GetService("ReplicatedStorage").Events.RetrievePlayerStats:InvokeServer()
         local v26 = {
             v27 = 0,
             v28 = 0,
             v29 = {}
         }
         
-        if v25 and v25.Bees then
-            for v30, v31 in pairs(v25.Bees) do
-                if v31 then
+        if v24 and v24.Bees then
+            for v30, v31 in pairs(v24.Bees) do
+                if v31 and v31.Type then
                     v26.v27 = v26.v27 + 1
                     v26.v29[v30] = {
                         v32 = v31.Type or "Unknown",
@@ -89,7 +88,7 @@ function v_u_4()
         end
         
         for _, v34 in pairs(game.Workspace.Honeycombs:GetChildren()) do
-            if tostring(v34.Owner.Value) == v1.Name then
+            if v34.Owner.Value and tostring(v34.Owner.Value) == v1.Name then
                 local v35 = v34:FindFirstChild("Cells")
                 if v35 then
                     v26.v28 = #v35:GetChildren()
@@ -141,7 +140,7 @@ function v_u_5()
         print("Hat:", v36.v11.v15)
         print("")
         
-        print("=== EGGS ===")
+        print("=== INV ===")
         for v39, v40 in pairs(v36.v10) do
             if v40 > 0 then
                 print(v39 .. ":", v40)
