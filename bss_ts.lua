@@ -148,8 +148,7 @@ function v_u_5()
         end
         print("")
     end
-  --[[  
-  BUG
+    
     if v38 then
         print("========== BEES ==========")
         print("Count:", v38.v27 .. "/" .. v38.v28)
@@ -161,5 +160,5 @@ function v_u_5()
     
     print("==========================================")
 end
-]]
+
 v_u_5()
