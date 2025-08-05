@@ -33,7 +33,7 @@ function getinv()
         itms = {},
         eggs = result.Eggs or {},
         equippeditm = {
-            t = result.EquippedTool or "None",
+            t = result.EquippedCollector or "None",
             p = result.EquippedParachute or "None"
         }
     }
@@ -148,3 +148,4 @@ function printdata()
 end
 
 printdata()
+
