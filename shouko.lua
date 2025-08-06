@@ -996,7 +996,7 @@ function Library:create_ui()
             Module.BackgroundTransparency = 0.5
             Module.Position = UDim2.new(0.004115226212888956, 0, 0, 0)
             Module.Name = 'Module'
-            Module.Size = UDim2.new(0, 320, 0, 105)
+            Module.Size = UDim2.new(0, 310, 0, 130)
             Module.BorderSizePixel = 0
             Module.BackgroundColor3 = Color3.fromRGB(22, 28, 38)
             Module.Parent = settings.section
@@ -1023,7 +1023,7 @@ function Library:create_ui()
             Header.AutoButtonColor = false
             Header.BackgroundTransparency = 1
             Header.Name = 'Header'
-            Header.Size = UDim2.new(0, 320, 0, 105)
+            Header.Size = UDim2.new(0, 310, 0, 130)
             Header.BorderSizePixel = 0
             Header.TextSize = 14
             Header.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
@@ -1039,7 +1039,7 @@ function Library:create_ui()
             Icon.BackgroundTransparency = 1
             Icon.Position = UDim2.new(0.07100000232458115, 0, 0.8199999928474426, 0)
             Icon.Name = 'Icon'
-            Icon.Size = UDim2.new(0, 15, 0, 15)
+            Icon.Size = UDim2.new(0, 18, 0, 18)
             Icon.BorderSizePixel = 0
             Icon.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
             Icon.Parent = Header
@@ -1055,14 +1055,14 @@ function Library:create_ui()
                 ModuleName.Text = settings.richtext or "<font color='rgb(255,0,0)'>March</font> user"
             end;
             ModuleName.Name = 'ModuleName'
-            ModuleName.Size = UDim2.new(0, 205, 0, 13)
+            ModuleName.Size = UDim2.new(0, 240, 0, 16)
             ModuleName.AnchorPoint = Vector2.new(0, 0.5)
             ModuleName.Position = UDim2.new(0.0729999989271164, 0, 0.23999999463558197, 0)
             ModuleName.BackgroundTransparency = 1
             ModuleName.TextXAlignment = Enum.TextXAlignment.Left
             ModuleName.BorderSizePixel = 0
             ModuleName.BorderColor3 = Color3.fromRGB(0, 0, 0)
-            ModuleName.TextSize = 13
+            ModuleName.TextSize = 15
             ModuleName.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
             ModuleName.Parent = Header
             
@@ -1072,14 +1072,14 @@ function Library:create_ui()
             Description.TextTransparency = 0.699999988079071
             Description.Text = settings.description
             Description.Name = 'Description'
-            Description.Size = UDim2.new(0, 205, 0, 13)
+            Description.Size = UDim2.new(0, 240, 0, 15)
             Description.AnchorPoint = Vector2.new(0, 0.5)
             Description.Position = UDim2.new(0.0729999989271164, 0, 0.41999998688697815, 0)
             Description.BackgroundTransparency = 1
             Description.TextXAlignment = Enum.TextXAlignment.Left
             Description.BorderSizePixel = 0
             Description.BorderColor3 = Color3.fromRGB(0, 0, 0)
-            Description.TextSize = 10
+            Description.TextSize = 12
             Description.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
             Description.Parent = Header
             
@@ -1088,7 +1088,7 @@ function Library:create_ui()
             Toggle.BackgroundTransparency = 0.699999988079071
             Toggle.Position = UDim2.new(0.8199999928474426, 0, 0.7570000290870667, 0)
             Toggle.BorderColor3 = Color3.fromRGB(0, 0, 0)
-            Toggle.Size = UDim2.new(0, 25, 0, 12)
+            Toggle.Size = UDim2.new(0, 30, 0, 15)
             Toggle.BorderSizePixel = 0
             Toggle.BackgroundColor3 = Color3.fromRGB(0, 0, 0)
             Toggle.Parent = Header
@@ -1103,7 +1103,7 @@ function Library:create_ui()
             Circle.BackgroundTransparency = 0.20000000298023224
             Circle.Position = UDim2.new(0, 0, 0.5, 0)
             Circle.Name = 'Circle'
-            Circle.Size = UDim2.new(0, 12, 0, 12)
+            Circle.Size = UDim2.new(0, 15, 0, 15)
             Circle.BorderSizePixel = 0
             Circle.BackgroundColor3 = Color3.fromRGB(66, 80, 115)
             Circle.Parent = Toggle
@@ -1117,7 +1117,7 @@ function Library:create_ui()
             Keybind.BackgroundTransparency = 0.699999988079071
             Keybind.Position = UDim2.new(0.15000000596046448, 0, 0.7350000143051147, 0)
             Keybind.BorderColor3 = Color3.fromRGB(0, 0, 0)
-            Keybind.Size = UDim2.new(0, 33, 0, 15)
+            Keybind.Size = UDim2.new(0, 40, 0, 18)
             Keybind.BorderSizePixel = 0
             Keybind.BackgroundColor3 = Color3.fromRGB(255, 100, 100)
             Keybind.Parent = Header
@@ -1132,12 +1132,12 @@ function Library:create_ui()
             TextLabel.BorderColor3 = Color3.fromRGB(0, 0, 0)
             TextLabel.Text = 'None'
             TextLabel.AnchorPoint = Vector2.new(0.5, 0.5)
-            TextLabel.Size = UDim2.new(0, 25, 0, 13)
+            TextLabel.Size = UDim2.new(0, 32, 0, 16)
             TextLabel.BackgroundTransparency = 1
             TextLabel.TextXAlignment = Enum.TextXAlignment.Left
             TextLabel.Position = UDim2.new(0.5, 0, 0.5, 0)
             TextLabel.BorderSizePixel = 0
-            TextLabel.TextSize = 10
+            TextLabel.TextSize = 11
             TextLabel.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
             TextLabel.Parent = Keybind
             
@@ -1147,7 +1147,7 @@ function Library:create_ui()
             Divider.BackgroundTransparency = 0.5
             Divider.Position = UDim2.new(0.5, 0, 0.6200000047683716, 0)
             Divider.Name = 'Divider'
-            Divider.Size = UDim2.new(0, 320, 0, 1)
+            Divider.Size = UDim2.new(0, 310, 0, 1)
             Divider.BorderSizePixel = 0
             Divider.BackgroundColor3 = Color3.fromRGB(52, 66, 89)
             Divider.Parent = Header
@@ -1158,7 +1158,7 @@ function Library:create_ui()
             Divider.BackgroundTransparency = 0.5
             Divider.Position = UDim2.new(0.5, 0, 1, 0)
             Divider.Name = 'Divider'
-            Divider.Size = UDim2.new(0, 320, 0, 1)
+            Divider.Size = UDim2.new(0, 310, 0, 1)
             Divider.BorderSizePixel = 0
             Divider.BackgroundColor3 = Color3.fromRGB(52, 66, 89)
             Divider.Parent = Header
@@ -1168,7 +1168,7 @@ function Library:create_ui()
             Options.BackgroundTransparency = 1
             Options.Position = UDim2.new(0, 0, 1, 0)
             Options.BorderColor3 = Color3.fromRGB(0, 0, 0)
-            Options.Size = UDim2.new(0, 320, 0, 8)
+            Options.Size = UDim2.new(0, 310, 0, 8)
             Options.BorderSizePixel = 0
             Options.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
             Options.Parent = Module
@@ -1188,7 +1188,7 @@ function Library:create_ui()
 
                 if self._state then
                     TweenService:Create(Module, TweenInfo.new(0.5, Enum.EasingStyle.Quint, Enum.EasingDirection.Out), {
-                        Size = UDim2.fromOffset(320, 120 + self._size + self._multiplier)
+                        Size = UDim2.fromOffset(310, 130 + self._size + self._multiplier)
                     }):Play()
 
                     TweenService:Create(Toggle, TweenInfo.new(0.5, Enum.EasingStyle.Quint, Enum.EasingDirection.Out), {
@@ -1201,7 +1201,7 @@ function Library:create_ui()
                     }):Play()
                 else
                     TweenService:Create(Module, TweenInfo.new(0.5, Enum.EasingStyle.Quint, Enum.EasingDirection.Out), {
-                        Size = UDim2.fromOffset(320, 120)
+                        Size = UDim2.fromOffset(310, 130)
                     }):Play()
 
                     TweenService:Create(Toggle, TweenInfo.new(0.5, Enum.EasingStyle.Quint, Enum.EasingDirection.Out), {
@@ -1357,10 +1357,10 @@ function Library:create_ui()
                 self._size += settings.customScale or 70
             
                 if ModuleManager._state then
-                    Module.Size = UDim2.fromOffset(320, 120 + self._size)
+                    Module.Size = UDim2.fromOffset(310, 130 + self._size)
                 end
             
-                Options.Size = UDim2.fromOffset(278, self._size)
+                Options.Size = UDim2.fromOffset(310, self._size)
             
                 -- Container Frame
                 local Paragraph = Instance.new('Frame')
