@@ -554,7 +554,7 @@ function Library:create_ui()
     Handler.BackgroundTransparency = 1
     Handler.Name = 'Handler'
     Handler.BorderColor3 = Color3.fromRGB(0, 0, 0)
-    Handler.Size = UDim2.new(0, 800, 0, 550)
+    Handler.Size = UDim2.new(0, 950, 0, 650)
     Handler.BorderSizePixel = 0
     Handler.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
     Handler.Parent = Container
@@ -563,7 +563,7 @@ function Library:create_ui()
     Tabs.ScrollBarImageTransparency = 1
     Tabs.ScrollBarThickness = 0
     Tabs.Name = 'Tabs'
-    Tabs.Size = UDim2.new(0, 150, 0, 470)
+    Tabs.Size = UDim2.new(0, 175, 0, 550)
     Tabs.Selectable = false
     Tabs.AutomaticCanvasSize = Enum.AutomaticSize.XY
     Tabs.BackgroundTransparency = 1
@@ -635,7 +635,7 @@ function Library:create_ui()
     Divider.BackgroundTransparency = 0.5
     Divider.Position = UDim2.new(0.23499999940395355, 0, 0, 0)
     Divider.BorderColor3 = Color3.fromRGB(0, 0, 0)
-    Divider.Size = UDim2.new(0, 1, 0, 550)
+    Divider.Size = UDim2.new(0, 1, 0, 650)
     Divider.BorderSizePixel = 0
     Divider.BackgroundColor3 = Color3.fromRGB(52, 66, 89)
     Divider.Parent = Handler
@@ -725,11 +725,11 @@ function Library:create_ui()
     function self:change_visiblity(state: boolean)
         if state then
             TweenService:Create(Container, TweenInfo.new(0.5, Enum.EasingStyle.Quint, Enum.EasingDirection.Out), {
-                Size = UDim2.fromOffset(800, 550)
+                Size = UDim2.fromOffset(950, 650)
             }):Play()
         else
             TweenService:Create(Container, TweenInfo.new(0.5, Enum.EasingStyle.Quint, Enum.EasingDirection.Out), {
-                Size = UDim2.fromOffset(120, 60)
+                Size = UDim2.fromOffset(140, 70)
             }):Play()
         end
     end
@@ -760,7 +760,7 @@ function Library:create_ui()
         end
     
         TweenService:Create(Container, TweenInfo.new(0.5, Enum.EasingStyle.Quint, Enum.EasingDirection.Out), {
-            Size = UDim2.fromOffset(800, 550)
+            Size = UDim2.fromOffset(950, 650)
         }):Play()
 
         AcrylicBlur.new(Container)
@@ -859,7 +859,7 @@ function Library:create_ui()
         Tab.AutoButtonColor = false
         Tab.BackgroundTransparency = 1
         Tab.Name = 'Tab'
-        Tab.Size = UDim2.new(0, 150, 0, 42)
+        Tab.Size = UDim2.new(0, 175, 0, 48)
         Tab.BorderSizePixel = 0
         Tab.TextSize = 14
         Tab.BackgroundColor3 = Color3.fromRGB(22, 28, 38)
@@ -912,7 +912,7 @@ function Library:create_ui()
         LeftSection.Name = 'LeftSection'
         LeftSection.AutomaticCanvasSize = Enum.AutomaticSize.XY
         LeftSection.ScrollBarThickness = 0
-        LeftSection.Size = UDim2.new(0, 280, 0, 510)
+        LeftSection.Size = UDim2.new(0, 330, 0, 600)
         LeftSection.Selectable = false
         LeftSection.AnchorPoint = Vector2.new(0, 0.5)
         LeftSection.ScrollBarImageTransparency = 1
@@ -939,7 +939,7 @@ function Library:create_ui()
         RightSection.Name = 'RightSection'
         RightSection.AutomaticCanvasSize = Enum.AutomaticSize.XY
         RightSection.ScrollBarThickness = 0
-        RightSection.Size = UDim2.new(0, 280, 0, 510)
+        RightSection.Size = UDim2.new(0, 330, 0, 600)
         RightSection.Selectable = false
         RightSection.AnchorPoint = Vector2.new(0, 0.5)
         RightSection.ScrollBarImageTransparency = 1
@@ -996,7 +996,7 @@ function Library:create_ui()
             Module.BackgroundTransparency = 0.5
             Module.Position = UDim2.new(0.004115226212888956, 0, 0, 0)
             Module.Name = 'Module'
-            Module.Size = UDim2.new(0, 278, 0, 105)
+            Module.Size = UDim2.new(0, 320, 0, 105)
             Module.BorderSizePixel = 0
             Module.BackgroundColor3 = Color3.fromRGB(22, 28, 38)
             Module.Parent = settings.section
@@ -1023,7 +1023,7 @@ function Library:create_ui()
             Header.AutoButtonColor = false
             Header.BackgroundTransparency = 1
             Header.Name = 'Header'
-            Header.Size = UDim2.new(0, 278, 0, 105)
+            Header.Size = UDim2.new(0, 320, 0, 105)
             Header.BorderSizePixel = 0
             Header.TextSize = 14
             Header.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
@@ -1147,7 +1147,7 @@ function Library:create_ui()
             Divider.BackgroundTransparency = 0.5
             Divider.Position = UDim2.new(0.5, 0, 0.6200000047683716, 0)
             Divider.Name = 'Divider'
-            Divider.Size = UDim2.new(0, 278, 0, 1)
+            Divider.Size = UDim2.new(0, 320, 0, 1)
             Divider.BorderSizePixel = 0
             Divider.BackgroundColor3 = Color3.fromRGB(52, 66, 89)
             Divider.Parent = Header
@@ -1158,7 +1158,7 @@ function Library:create_ui()
             Divider.BackgroundTransparency = 0.5
             Divider.Position = UDim2.new(0.5, 0, 1, 0)
             Divider.Name = 'Divider'
-            Divider.Size = UDim2.new(0, 278, 0, 1)
+            Divider.Size = UDim2.new(0, 320, 0, 1)
             Divider.BorderSizePixel = 0
             Divider.BackgroundColor3 = Color3.fromRGB(52, 66, 89)
             Divider.Parent = Header
@@ -1168,7 +1168,7 @@ function Library:create_ui()
             Options.BackgroundTransparency = 1
             Options.Position = UDim2.new(0, 0, 1, 0)
             Options.BorderColor3 = Color3.fromRGB(0, 0, 0)
-            Options.Size = UDim2.new(0, 278, 0, 8)
+            Options.Size = UDim2.new(0, 320, 0, 8)
             Options.BorderSizePixel = 0
             Options.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
             Options.Parent = Module
@@ -1188,7 +1188,7 @@ function Library:create_ui()
 
                 if self._state then
                     TweenService:Create(Module, TweenInfo.new(0.5, Enum.EasingStyle.Quint, Enum.EasingDirection.Out), {
-                        Size = UDim2.fromOffset(278, 105 + self._size + self._multiplier)
+                        Size = UDim2.fromOffset(320, 120 + self._size + self._multiplier)
                     }):Play()
 
                     TweenService:Create(Toggle, TweenInfo.new(0.5, Enum.EasingStyle.Quint, Enum.EasingDirection.Out), {
@@ -1201,7 +1201,7 @@ function Library:create_ui()
                     }):Play()
                 else
                     TweenService:Create(Module, TweenInfo.new(0.5, Enum.EasingStyle.Quint, Enum.EasingDirection.Out), {
-                        Size = UDim2.fromOffset(278, 105)
+                        Size = UDim2.fromOffset(320, 120)
                     }):Play()
 
                     TweenService:Create(Toggle, TweenInfo.new(0.5, Enum.EasingStyle.Quint, Enum.EasingDirection.Out), {
@@ -1357,7 +1357,7 @@ function Library:create_ui()
                 self._size += settings.customScale or 70
             
                 if ModuleManager._state then
-                    Module.Size = UDim2.fromOffset(278, 105 + self._size)
+                    Module.Size = UDim2.fromOffset(320, 120 + self._size)
                 end
             
                 Options.Size = UDim2.fromOffset(278, self._size)
