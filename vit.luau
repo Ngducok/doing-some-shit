@@ -439,7 +439,7 @@ function Library:create_ui()
         AcrylicBlur.new(Container)
         self._ui_loaded = true
     end
-    function self:update_tabs(tab)
+    function self:update_tabs(tab, left_section, right_section)
         for _, object in Tabs:GetChildren() do
             if object.Name ~= 'Tab' then continue end
             if object == tab then
@@ -1121,4 +1121,101 @@ function Library:create_ui()
     end)
     return self
 end
-return Library
+-- Exploit environment compatibility patch
+local function safe_pcall(fn, ...)
+    local ok, res = pcall(fn, ...)
+    if ok then return true, res end
+    return false, res
+end
+local function exists(f) return typeof(f) == 'function' end
+local has_fs = exists(isfolder) and exists(makefolder) and exists(writefile) and exists(readfile)
+local function safe_cloneref(obj)
+    if exists(cloneref) then
+        local ok, res = pcall(cloneref, obj)
+        if ok and res then return res end
+    end
+    return obj
+end
+
+if not gethui then gethui = function() return (game:FindFirstChildOfClass('CoreGui') or game:GetService('Players').LocalPlayer:WaitForChild('PlayerGui')) end end
+if not isfile then isfile = function() return false end end
+if not isfolder then isfolder = function() return false end end
+if not makefolder then makefolder = function() end end
+if not writefile then writefile = function() end end
+if not readfile then readfile = function() return '' end end
+
+if UserInputService then
+    UserInputService = safe_cloneref(UserInputService)
+    TweenService = safe_cloneref(TweenService)
+    TextService = safe_cloneref(TextService)
+    HttpService = safe_cloneref(HttpService)
+    ContentProvider = safe_cloneref(ContentProvider)
+    RunService = safe_cloneref(RunService)
+    Lighting = safe_cloneref(Lighting)
+    Players = safe_cloneref(Players)
+    CoreGui = safe_cloneref(CoreGui)
+    Debris = safe_cloneref(Debris)
+end
+
+if Config then
+    local raw_save = Config.save
+    function Config:save(id, data)
+        if not has_fs then return end
+        safe_pcall(raw_save, self, id, data)
+    end
+    local raw_load = Config.load
+    function Config:load(id)
+        if not has_fs then return {_flags = {}, _keybinds = {}} end
+        local ok, res = safe_pcall(raw_load, self, id)
+        if ok and res then return res end
+        return {_flags = {}, _keybinds = {}}
+    end
+end
+
+local _Library_new = Library.new
+function Library.new(settings)
+    settings = settings or {}
+    local self = _Library_new(settings)
+    self._settings = settings
+    return self
+end
+
+local _create_ui_pending
+local function patch_create_ui()
+    if _create_ui_pending or not Library.create_ui then return end
+    _create_ui_pending = true
+    local raw_create = Library.create_ui
+    function Library:create_ui(name)
+        local ui = raw_create(self, name)
+        -- Reparent safely
+        local parent = (self._settings and self._settings.parent) or (exists(gethui) and gethui()) or CoreGui or (Players.LocalPlayer:WaitForChild('PlayerGui'))
+        if ui and ui._ui and ui._ui.Parent ~= parent then
+            safe_pcall(function()
+                ui._ui.Parent = parent
+                if syn and exists(syn.protect_gui) then syn.protect_gui(ui._ui) end
+                if get_hidden_gui and exists(get_hidden_gui) then
+                    -- some executors use get_hidden_gui
+                    pcall(function() ui._ui.Parent = get_hidden_gui() end)
+                end
+            end)
+        end
+        return ui
+    end
+end
+patch_create_ui()
+
+if AcrylicBlur and AcrylicBlur.new then
+    local raw_blur_new = AcrylicBlur.new
+    function AcrylicBlur.new(container)
+        if (Library._settings and Library._settings.disable_blur) then return end
+        safe_pcall(raw_blur_new, container)
+    end
+end
+
+local _raw_load = Library.load
+if _raw_load then
+    function Library:load(...)
+        local result = { _raw_load(self, ...) }
+        return table.unpack(result)
+    end
+end
