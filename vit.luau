@@ -25,6 +25,7 @@ local HttpService = cloneref(game:GetService('HttpService'))
 local Players = cloneref(game:GetService('Players'))
 local CoreGui = cloneref(game:GetService('CoreGui'))
 local ContentProvider = cloneref(game:GetService('ContentProvider'))
+local RunService = cloneref(game:GetService('RunService'))
 local mouse = Players.LocalPlayer:GetMouse()
 local Connections = {}
 local function bind(key, fn)
@@ -108,7 +109,7 @@ function Library:_build_root()
     layoutHolder.Parent = container
     local left = Instance.new('Frame')
     left.Name = 'Nav'
-    left.Size = UDim2.new(0,.22,1,0)
+    left.Size = UDim2.new(0.22,0,1,0)
     left.BackgroundTransparency = 1
     left.Parent = layoutHolder
     local tabsScroll = Instance.new('ScrollingFrame')
@@ -422,7 +423,7 @@ function Library:create_tab(title, icon)
                 if self._library._config._flags[c.flag] ~= nil then state = self._library._config._flags[c.flag] end
             end
             local function render()
-                TweenService:Create(fill, TweenInfo.new(.25, Enum.EasingStyle.Quint, Enum.EasingDirection.Out), {Size = state and UDim2.fromOffset(14,14) or UDim2.fromOffset(0,0)}):Play()
+                TweenService:Create(fill, Tween Info.new(.25, Enum.EasingStyle.Quint, Enum.EasingDirection.Out), {Size = state and UDim2.fromOffset(14,14) or UDim2.fromOffset(0,0)}):Play()
             end
             function btn:set(v)
                 state = v
