@@ -32,6 +32,21 @@ function v3.new(v7)
     v11.SortOrder=Enum.SortOrder.LayoutOrder
     v11.Padding=UDim.new(0,v7.padding or 10)
     local v12={_gui=v8,_frame=v10,_layout=v11,_labels={},_order=0,_formatters={},_bindings={},_autoSize=v7.autoSize~=false}
+    local v40=Instance.new("TextLabel")
+    local v41=Instance.new("UIStroke")
+    v40.Name="Header"
+    v40.Parent=v10
+    v40.LayoutOrder=0
+    v40.BackgroundTransparency=1
+    v40.Font=v7.headerFont or Enum.Font.FredokaOne
+    v40.Text=v7.headerText or ""
+    v40.TextColor3=v7.headerColor or Color3.fromRGB(244,63,94)
+    v40.TextSize=v7.headerTextSize or 50
+    v41.Parent=v40
+    v41.Color=v7.headerStrokeColor or Color3.fromRGB(0,0,0)
+    v41.Thickness=v7.headerStrokeThickness or 1
+    v40.Size=UDim2.new(0,200,0,v7.headerHeight or 80)
+    v12._header=v40
     local function v13()
         if not v12._autoSize then return end
         local v14=0
@@ -55,8 +70,21 @@ function v3.new(v7)
         v10.Size=UDim2.new(0,v14+40,0,v16)
     end
     v12._resize=v13
+    v40:GetPropertyChangedSignal("Text"):Connect(v13)
+    function v12:setHeader(v42,v43)
+        if v12._header then
+            if v42~=nil then v12._header.Text=v42 end
+            if v43~=nil then v12._header.TextColor3=v43 end
+        end
+    end
     function v12:add(v17,v18,v19,v20)
-        if v12._labels[v17] then return v12._labels[v17] end
+        if v12._labels[v17] then
+            local old=v12._labels[v17]
+            if old.instance then old.instance:Destroy() end
+            v12._labels[v17]=nil
+            v12._formatters[v17]=nil
+            v12._bindings[v17]=nil
+        end
         v20=v20 or {}
         v12._order=v12._order+1
         local v21=Instance.new("TextLabel")
@@ -120,6 +148,7 @@ function v3.new(v7)
             end
         end
     end)
+    v13()
     return v12
 end
 return v3
